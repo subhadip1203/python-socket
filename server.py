@@ -15,3 +15,16 @@ nick_names=[]
 def broadcast(message):
     for client in clients:
         client.send(message)
+
+def handle(client):
+    while True:
+        try:
+            message = client.recv(1024)
+            broadcast(message)
+        except:
+            index = clients.index(client)
+            clients.remove(client)
+            nickname= nick_names[index]
+            broadcast(f'{nickname} left the chat'.encode('ascii'))
+            nick_names.remove(nickname)
+            break
